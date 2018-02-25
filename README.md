@@ -6,13 +6,11 @@ al. (Estimating river surface elevation from ArcticDEM, GRL, 2018).
 
 Step 1: Shoreline detection using entropy and brightness: 
 maskentropy.m: data processing for Fig. 1.
-Input files (orthoimage, metafile, matchtag) are not shared here due to copyrigh
-t limitation.
+Input files (orthoimage, metafile, matchtag) are not shared here due to copyright limitation.
 tancl.mat: river center line file for winter cases.
 plotentropy.gmt, plotentropyb.gmt, plotentropyc.gmt, plotentropyd.gmt: plotting 
 script of Fig. 1.
-2013MayOr.dat, 2013MayJ.dat, 2013MayMask.dat, 2013MayCoast.dat: data files of Fi
-g. 1
+2013MayOr.dat, 2013MayJ.dat, 2013MayMask.dat, 2013MayCoast.dat: data files of Fig. 1
 
 Step 2: Elevation extraction.
 riverprof.m: data processing for extracting river heights. (Some of the subrouti
@@ -39,6 +37,8 @@ stagedischarge.m: Plot Fig.3b for the discharge time series.
 Preparation:
 uv10to16.txt: data files for stage-discharge rating curve.
 legs.m, legsd.m: computation of legendre function for fitting rating curve.
+scale4legs.m: preparation of the variables for legendre polynomials, which map variables into range -1 to 1.
+Subroutines legs.m, legsd.m, and scale4legs.m are provided by Prof. Michael G. Bevis.
 
 The comparison of river height time series by two different methods.
 comparemethods.m
