@@ -10,7 +10,7 @@ Input files (orthoimage, metafile, matchtag) are not shared here due to copyrigh
 tancl.mat: river center line file for winter cases.
 plotentropy.gmt, plotentropyb.gmt, plotentropyc.gmt, plotentropyd.gmt: plotting 
 script of Fig. 1.
-2013MayOr.dat, 2013MayJ.dat, 2013MayMask.dat, 2013MayCoast.dat: data files of Fig. 1
+2013MayOr.dat, 2013MayJ.dat, 2013MayMask.dat, 2013MayCoast.dat: data files of Fig. 1, and some of the files are too big for uploading.
 
 Step 2: Elevation extraction.
 riverprof.m: data processing for extracting river heights. (Some of the subrouti
