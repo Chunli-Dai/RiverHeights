@@ -4,13 +4,17 @@ River shoreline detection and elevation extraction.
 Here are the codes and data files for generating figures in the paper by Dai et 
 al. (Estimating river surface elevation from ArcticDEM, GRL, 2018).
 
-Step 1: Shoreline detection using entropy and brightness: 
+Step 1: Shoreline detection using entropy, brightness, and NDWI method: 
 maskentropy.m: data processing for Fig. 1.
 Input files (orthoimage, metafile, matchtag) are not shared here due to copyright limitation.
 tancl.mat: river center line file for winter cases.
 plotentropy.gmt, plotentropyb.gmt, plotentropyc.gmt, plotentropyd.gmt: plotting 
 script of Fig. 1.
 2013MayOr.dat, 2013MayJ.dat, 2013MayMask.dat, 2013MayCoast.dat: data files of Fig. 1, and some of the files are too big for uploading.
+multispec.m: NDWI method for shoreline detection. 
+Input files: Original multi-spectral imageries are not shared.
+Output:shoreline file, coastndwi.dat, not shared here.
+plotentropyd2.gmt, plotentropyd2b.gmt: script for plotting Fig. S1.
 
 Step 2: Elevation extraction.
 riverprof.m: data processing for extracting river heights. (Some of the subrouti
