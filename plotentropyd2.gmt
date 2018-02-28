@@ -1,0 +1,170 @@
+#!/bin/sh 
+## Modified from /0/home/dai.56/Osuwork/Altimetry/icesatFromKun/plottrendzoom
+
+#gmtset ANNOT_FONT_SIZE 14
+gmtset HEADER_OFFSET 0.1c
+gmtset HEADER_FONT_SIZE 10
+#gmtset ANNOT_FONT_PRIMARY 0
+gmtset FONT_ANNOT_PRIMARY 10
+gmtset PAPER_MEDIA letter
+gmtset TICK_LENGTH 0.1c
+gmtset LABEL_OFFSET 0.15c
+#gmtset FRAME_WIDTH 0.05
+gmtset FRAME_PEN 1p
+gmtset BASEMAP_TYPE plain
+gmtset PLOT_DEGREE_FORMAT +ddd
+gmtset COLOR_BACKGROUND gray30
+gmt set FORMAT_GEO_MAP ddd:mm
+
+makecpt -T0/800/10 -Cgray.cpt -Z  > topo.cpt
+#region='-R-141.215/-141.12/60.15/60.195'
+region='-R-148.9833/-147.8667/64.5667/64.800'
+region='-R-148.18/-147.835/64.689/64.82' #axis([-148.18 -147.835 64.689 64.82])
+region='-R-148.175/-148.03/64.697/64.76' ##-148.175 -148.03 64.697 64.76
+projection='-JM3i'
+#projection='-Js-140/90/1000.0i/45'
+#projection='-JT140/38/3i' # plain frame
+
+base=base.ps
+ofile='demJdJ3.ps'
+
+# base figure
+if true
+then
+makecpt -T0/6/0.1 -Cjet2.cpt -Z > topo.cpt
+psbasemap $region $projection -Ba2m/a1mWSne:.: -K -V  > $base
+awk '{print $2, $1,$3}' 2013MayJ.dat> xy   #mm
+xyz2grd xy $region -I0.6s -Gban.grd 
+grdimage ban.grd -B -R -J -K -O -V -Ctopo.cpt >> $base
+#pscoast -R $projection -I2/1.2p,lightblue -I1/1.2p,lightblue -N1/1p,black -Slightblue -Di -W -K -O -V >> $base
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+fi
+
+cp $base $ofile
+
+#region2='-R-148.45/-148.1667/64.650/64.7333'
+psbasemap $region $projection -B -K -O -V >>$ofile
+#psbasemap $region $projection -B -K -V >$ofile
+#awk '{print $2, $1,$3/100}' tmp3> xy  #decimeter
+if false
+then
+awk '{print $2, $1,$3}' 2013MayMask.dat> xy   #mm
+xyz2grd xy $region -I0.6s -Gban.grd 
+fi
+#grdimage x.grd -Ctrend.cpt -J -R -V -t30 -K -O >> $ofile
+#grdgradient ban.grd -A90/90 -Gsrtm.grad -Ne0.7 
+#grdimage ban.grd -B -R -J -K -O -V -Ctopo.cpt -t70 >> $ofile
+
+
+#pscoast -R $projection -Ia/1.2p,lightblue -I1/1.2p,lightblue -N1/1p,black -Slightblue -Di -W -K -O -V >> $ofile
+#pscoast -R $projection -I2/1.2p,lightblue -I1/1.2p,lightblue -N1/1p,black -Di -W -K -O -V >> $ofile
+if false
+then
+awk '{print $2, $1,$3}' rivprof2win.dat > riv.dat
+psxy riv.dat -Ss0.001i -Glightblue -J -R -V -K -O >> $ofile
+fi
+awk '{print $2, $1,$3}' 2013MayCoast.dat > riv.dat
+psxy riv.dat -Ss0.015i -Gred -J -R -V -K -O >> $ofile
+awk '{print $2, $1,$3}' 2013MayCoastJ3.dat > riv.dat
+psxy riv.dat -Ss0.015i -Gblack -J -R -V -K -O >> $ofile
+
+if true
+then
+psxy $region $projection -Sc0.1i -W2.0p,white -K -O -V >>$ofile  << END
+#-1.4118490e+02  6.0178293e+01 
+END
+#scale
+psxy $region $projection -W4.0p,black -K -O -V >>$ofile  << END
+# -141.6667 60.1083
+#-141.604 60.1083
+-148.1501 64.7
+-148.1076 64.7
+END
+echo -148.1288 64.703 12 0 0 MC 2 km | pstext -R -F+f12p,black -J -K -O  >>  $ofile
+
+echo -141.2 60.1980 14 0 3 MC 2015 | pstext -R -J -K -O >> $ofile
+echo -141.2  60.190  14 0 3 MC Landslide| pstext -R -J -K -O >> $ofile
+if false
+then
+psvelo $region $projection -Se0.01/0.95/25 -O -W2.0p,red -L -V -K -P >> $ofile << END
+#Long.    Lat.   Vu     σVu
+-148.0300   64.768 -200 -115  0 0  0
+END
+echo -148.0500   64.773 8 0 3 MC Flow Direction| pstext -R -F+a30 -J -Gwhite -K -O >> $ofile
+echo -148.0800   64.81 14 0 3 MC TANANA RIVER| pstext -R -J -Gwhite -K -O >> $ofile
+fi
+#echo -141.1383 60.1765 14 0 3 MC Melting| pstext -R -J -K -O >> $ofile
+psvelo $region $projection -Se0.01/0.95/25 -O -W1.0p,black -L -V -K -P >> $ofile << END
+#Long.    Lat.   Vu     σVu
+#-141.1493 60.1783 -99 0  0 0  0
+END
+echo -147.88 64.814 9 0 3 MC Fairbanks| pstext -R -J -K -O -F+f12p,white>> $ofile 
+echo -147.88 64.807 9 0 3 MC International| pstext -R -J -K -O -F+f12p,white>> $ofile
+echo -147.88 64.8 9 0 3 MC Airport| pstext -R -J -K -O -F+f12p,white>> $ofile
+echo -147.656678 64.837446 10 0 3 Fairbanks| pstext -R -J -K -O >> $ofile
+echo -149.086333 64.538620 10 0 3 Nenana| pstext -R -J -K -O >> $ofile
+echo -141.1553 60.1467 10 0 3 MC Taan | pstext -R -J -K -O >> $ofile
+echo -141.1633 60.1333 10 0 3 MC Fiord | pstext -R -J -K -O >> $ofile
+fi
+
+if false
+then
+#-148.175 -148.03 64.697 64.76
+psxy $region $projection -W1.0p,white,-- -K -O -V >>$ofile  << END
+-148.175 64.697
+-148.03 64.697
+-148.03 64.76
+-148.175 64.76
+-148.175 64.697
+END
+psxy $region $projection -F+f12p,-=0.5p,white -Wwhite,-- -K -O -V >>$ofile  << END
+-148.175 64.697
+-147.835 64.689
+END
+fi
+
+psxy $region $projection -W1.0p,black -S-0.18i -Gred -K -O -V >>$ofile  << END
+-148.095 64.715
+END
+echo -148.07 64.715 10 0 0 MC Shoreline| pstext -R -S1.5p -F+f10p,black -J -K -O  >>  $ofile
+echo -148.065 64.712 10 0 0 MC Entropy Only| pstext -R -S1.5p -F+f10p,black -J -K -O  >>  $ofile
+
+psxy $region $projection -W1.0p,red -S-0.18i -Gred -K -O -V >>$ofile  << END
+#-148.07 64.71
+-148.095 64.705
+END
+echo -148.07 64.705 10 0 0 MC Shoreline| pstext -R -S1.5p -F+f10p,black -J -K -O  >>  $ofile
+echo -148.065 64.702 10 0 0 MC Entropy+Brightness| pstext -R -S1.5p -F+f10p,black -J -K -O  >>  $ofile
+if false
+then
+psxy $region $projection -Ss0.2i -Glightblue -K -O -V >>$ofile  << END
+-148.07 64.705
+END
+echo -148.05 64.705 9 0 0 MC River Water | pstext -R -S1.5p -F+f12p,white -J  -O  >>  $ofile
+fi
+
+psscale -E -Ctopo.cpt -D1.5i/-0.5i/2.5i/0.1ih -B1:"Entropy":/:: -O  --MAP_LABEL_OFFSET=-1.3c --FONT_LABEL=10 --MAP_FRAME_PEN=0.3p >> $ofile
+#psscale -E -Ctrend.cpt -D3.25i/-0.6i/5.0i/0.15ih -B10:"Elevation change (m)":/:: -O --MAP_LABEL_OFFSET=-1.7c --FONT_LABEL=14 --MAP_FRAME_PEN=0.3p >> $ofile
+
+if false
+then
+region3='-R-169.102517/-128.584939/53.554026/71.905819'
+projection3='-JM1.i'
+psbasemap $region3 $projection3 -X0.1i -Y1.8i -Bf10/f10 -Gwhite -K -O -V >>$ofile
+pscoast $region3 $projection3 -I1/1.2p,lightblue -I1/1.2p,lightblue -N1/1p,black -Di -W -K -O -V >> $ofile
+#-148.9833/-147.8667/64.5667/64.800
+psxy $region3 $projection3 -W1.0p,red -K -O -V >>$ofile  << END
+-148.9833 64.800
+-147.8667 64.800
+-147.8667 64.5667
+-148.9833 64.5667
+-148.9833 64.800
+END
+#echo -147.656678 64.837446  Fairbanks| pstext -R -J -K -O >> $ofile
+psxy empty $region3 $projection3 -W4.0p,black -O -V >>$ofile  
+fi
+
+ps2raster $ofile -Tj -E720 -A -P
+#ps2raster $ofile -Tj -A -P
+#rm -f $ofile
+
