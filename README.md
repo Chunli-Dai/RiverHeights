@@ -13,7 +13,7 @@ script of Fig. 1.
 2013MayOr.dat, 2013MayJ.dat, 2013MayMask.dat, 2013MayCoast.dat: data files of Fig. 1, and some of the files are too big for uploading.
 multispec.m: NDWI method for shoreline detection. 
 Input files: Original multi-spectral imageries are not shared.
-Output:shoreline file, coastndwi.dat, not shared here.
+Output:shoreline file, coastndwi.dat, is not shared here.
 plotentropyd2.gmt, plotentropyd2b.gmt: script for plotting Fig. S1.
 
 Step 2: Elevation extraction.
